@@ -6,6 +6,12 @@ export default {
     method: "GET",
     url: "/users",
     preHandler: [validateRequest],
-    handler: UserController.index,
+    handler: UserController.getAll,
+  },
+  getUsersById: {
+    method: "GET",
+    url: "/users/:id",
+    preHandler: [validateRequest],
+    handler: UserController.getByID,
   },
 };
