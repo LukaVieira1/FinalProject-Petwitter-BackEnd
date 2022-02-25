@@ -2,6 +2,7 @@ import { prisma, hashPassword } from "../src/helpers/utils.js";
 
 const userData = [
   {
+    username: "admin",
     name: "admin",
     email: "admin@admin.com",
     password: "12345",

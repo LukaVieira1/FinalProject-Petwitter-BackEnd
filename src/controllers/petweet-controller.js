@@ -34,19 +34,44 @@ export const del = async (req, reply) => {
 };
 
 export const getAll = async (req, reply) => {
+  const { username } = req.query;
+
   try {
-    const petweets = await prisma.petweet.findMany({
-      include: {
-        user: {
-          select: { name: true, username: true, email: true, createdAt: true },
+    if (username) {
+      const user = await prisma.user.findUnique({
+        where: {
+          username,
         },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-    return reply.send({ data: { petweets } });
+      });
+      const userPetweets = await prisma.petweet.findMany({
+        where: {
+          user_id: user.id,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+      return reply.send({ data: { userPetweets } });
+    } else {
+      const petweets = await prisma.petweet.findMany({
+        include: {
+          user: {
+            select: {
+              name: true,
+              username: true,
+              email: true,
+              createdAt: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+      return reply.send({ data: { petweets } });
+    }
   } catch (error) {
+    console.log(error);
     reply.status(500).send({ error: "Deu problema mermão" });
   }
 };
