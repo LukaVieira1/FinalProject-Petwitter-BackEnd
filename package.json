@@ -2,8 +2,8 @@
   "name": "boilerplate-back-end",
   "version": "1.0.0",
   "main": "src/index.js",
-  "repository": "git@github.com:OtterwiseCo/boilerplate-back-end.git",
-  "author": "João Pedro Bretanha <joaopedro@nave.rs>",
+  "repository": "git@github.com:LukaVieira1/FinalProject-Petwitter-BackEnd.git",
+  "author": "Luka Vieira Iribarrem <lukavieira14@gmail.com>",
   "license": "MIT",
   "type": "module",
   "prisma": {
