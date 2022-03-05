@@ -11,19 +11,28 @@ export const signup = async (req, reply) => {
   try {
     const password = await hashPassword(pass);
 
-    const { password: hashedPassword, ...user } = await prisma.user.create({
-      data: {
-        email,
-        password,
-        username,
-        name,
+    const alreadyHas = await prisma.user.findMany({
+      where: {
+        OR: [{ email }, { username }],
       },
     });
 
-    reply.send(user);
+    if (alreadyHas) {
+      reply.status(400).send(`Nome de usuario ou email já existente`);
+    } else {
+      const { password: hashedPassword, ...user } = await prisma.user.create({
+        data: {
+          email,
+          password,
+          username,
+          name,
+        },
+      });
+      reply.send(user);
+    }
   } catch (error) {
     console.log(error);
-    reply.status(400).send({ error: `User already exists!` });
+    reply.status(400).send({ error: `Deu problema mermão` });
   }
 };
 
@@ -33,11 +42,11 @@ export const login = async (req, reply) => {
     let user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      return reply.status(401).send({ error: "Invalid email or password" });
+      return reply.status(401).send({ error: "Email ou senha invalida" });
     }
 
     if (!(await comparePassword(password, user.password))) {
-      return reply.status(401).send({ error: "Invalid email or password" });
+      return reply.status(401).send({ error: "Email ou senha invalida" });
     }
 
     let { password: pass, ...data } = user;

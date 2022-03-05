@@ -75,3 +75,30 @@ export const getAll = async (req, reply) => {
     reply.status(500).send({ error: "Deu problema mermão" });
   }
 };
+
+export const getByID = async (req, reply) => {
+  const { id } = req.params;
+  try {
+    const petweets = await prisma.petweet.findMany({
+      where: {
+        user_id: Number(id),
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            username: true,
+            email: true,
+            createdAt: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return reply.send({ data: { petweets } });
+  } catch (error) {
+    reply.status(500).send({ error: "Deu problema mermão" });
+  }
+};

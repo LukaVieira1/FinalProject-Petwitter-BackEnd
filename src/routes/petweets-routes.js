@@ -20,4 +20,10 @@ export default {
     preHandler: [validateRequest],
     handler: PetweetController.getAll,
   },
+  GetByID: {
+    method: "GET",
+    url: "/petweets/:id",
+    preHandler: [validateRequest],
+    handler: PetweetController.getByID,
+  },
 };
