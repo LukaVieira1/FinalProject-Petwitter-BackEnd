@@ -1,5 +1,6 @@
 import * as PetweetController from "../controllers/petweet-controller.js";
 import { validateRequest } from "../middleware/auth.js";
+import { paginationParams } from "../middleware/pagination.js";
 
 export default {
   Create: {
@@ -17,13 +18,13 @@ export default {
   GetAll: {
     method: "GET",
     url: "/petweets",
-    preHandler: [validateRequest],
+    preHandler: [validateRequest, paginationParams],
     handler: PetweetController.getAll,
   },
   GetByID: {
     method: "GET",
     url: "/petweets/:id",
-    preHandler: [validateRequest],
+    preHandler: [validateRequest, paginationParams],
     handler: PetweetController.getByID,
   },
 };

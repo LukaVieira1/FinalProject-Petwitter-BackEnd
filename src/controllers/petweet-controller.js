@@ -34,42 +34,30 @@ export const del = async (req, reply) => {
 };
 
 export const getAll = async (req, reply) => {
-  const { username } = req.query;
-
+  const { take, skip, page } = req.pagination;
   try {
-    if (username) {
-      const user = await prisma.user.findUnique({
-        where: {
-          username,
-        },
-      });
-      const userPetweets = await prisma.petweet.findMany({
-        where: {
-          user_id: user.id,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-      return reply.send({ data: { userPetweets } });
-    } else {
-      const petweets = await prisma.petweet.findMany({
-        include: {
-          user: {
-            select: {
-              name: true,
-              username: true,
-              email: true,
-              createdAt: true,
-            },
+    const petweetsCount = await prisma.petweet.count();
+    const petweets = await prisma.petweet.findMany({
+      take,
+      skip,
+      include: {
+        user: {
+          select: {
+            name: true,
+            username: true,
+            email: true,
+            createdAt: true,
           },
         },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-      return reply.send({ data: { petweets } });
-    }
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return reply.send({
+      petweets,
+      pagination: { page, pageCount: Math.ceil(petweetsCount / take) },
+    });
   } catch (error) {
     console.log(error);
     reply.status(500).send({ error: "Deu problema mermão" });
@@ -78,8 +66,12 @@ export const getAll = async (req, reply) => {
 
 export const getByID = async (req, reply) => {
   const { id } = req.params;
+  const { take, skip, page } = req.pagination;
   try {
+    const petweetsCount = await prisma.petweet.count();
     const petweets = await prisma.petweet.findMany({
+      take,
+      skip,
       where: {
         user_id: Number(id),
       },
@@ -97,7 +89,10 @@ export const getByID = async (req, reply) => {
         createdAt: "desc",
       },
     });
-    return reply.send({ data: { petweets } });
+    return reply.send({
+      petweets,
+      pagination: { page, pageCount: Math.ceil(petweetsCount / take) },
+    });
   } catch (error) {
     reply.status(500).send({ error: "Deu problema mermão" });
   }
