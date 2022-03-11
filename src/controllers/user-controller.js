@@ -1,17 +1,5 @@
 import { prisma } from "../helpers/utils.js";
 
-// export const getAll = async (req, res) => {
-//   try {
-//     let users = await prisma.user.findMany({
-//       select: { id: true, email: true, username: true, name: true },
-//     });
-//     return res.send({ data: { users } });
-//   } catch (error) {
-//     console.error("users", error);
-//     res.status(500).send({ error: `Cannot fetch users` });
-//   }
-// };
-
 export const getByID = async (req, reply) => {
   const { id } = req.params;
   try {
