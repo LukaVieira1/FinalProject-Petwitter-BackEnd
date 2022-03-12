@@ -17,7 +17,7 @@ export const signup = async (req, reply) => {
       },
     });
 
-    if (alreadyHas) {
+    if (alreadyHas.length > 0) {
       reply.status(400).send(`Nome de usuario ou email já existente`);
     } else {
       const { password: hashedPassword, ...user } = await prisma.user.create({
