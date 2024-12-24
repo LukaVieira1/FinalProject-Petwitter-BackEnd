@@ -11,6 +11,5 @@
       "src": "/(.*)",
       "dest": "/src/config/server.js"
     }
-  ],
-  "includeFiles": ["prisma/**/*"]
+  ]
 }
