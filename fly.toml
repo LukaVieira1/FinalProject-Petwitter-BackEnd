@@ -1,2 +1,3 @@
 [build]
   builder = "paketobuildpacks/builder:base"
+  buildpacks = ["grc.io/paketo-buildpacks/nodejs"]
