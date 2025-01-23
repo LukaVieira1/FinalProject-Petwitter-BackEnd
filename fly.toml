@@ -1,8 +1,8 @@
 app = "petwitter-api"
-primary_region = "gru"  
+primary_region = "gru"  # São Paulo, Brasil
 
 [build]
-  builder = "heroku/buildpacks:20"  
+  builder = "paketobuildpacks/builder:base"
 
 [env]
   PORT = "8080"
